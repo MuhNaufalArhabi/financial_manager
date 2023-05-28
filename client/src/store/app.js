@@ -12,7 +12,7 @@ export const useAppStore = defineStore("app", {
       transactions: [],
       accounts: [],
       categories: [],
-      baseUrl: "http://localhost:3000",
+      baseUrl: "http://4.193.32.238:3000",
       isLogin: false,
       updateTrans: false,
       rekap: [],
@@ -41,13 +41,11 @@ export const useAppStore = defineStore("app", {
     },
     async getAccount() {
       try {
-        const { data } = await axios({
-          method: "GET",
-          url: this.baseUrl + "/accounts",
+        const { data } = await api.get('/accounts', {
           headers: {
-            access_token: sessionStorage.access_token,
-          },
-        });
+            access_token: sessionStorage.access_token
+          }
+        })
         this.accounts = data;
       } catch (error) {
         console.log(error);
@@ -55,13 +53,11 @@ export const useAppStore = defineStore("app", {
     },
     async getCategory() {
       try {
-        const { data } = await axios({
-          method: "GET",
-          url: this.baseUrl + "/categories",
+        const { data } = await api.get('/categories', {
           headers: {
-            access_token: sessionStorage.access_token,
-          },
-        });
+            access_token: sessionStorage.access_token
+          }
+        })
         this.categories = data;
       } catch (error) {
         console.log(error);
@@ -78,11 +74,6 @@ export const useAppStore = defineStore("app", {
       } catch (error) {
         console.log(error)
       }
-    }
-  },
-  getters: {
-    formatNumber: ()=> (num)=> {
-      return num.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
     }
   },
   persist: { storage: sessionStorage },

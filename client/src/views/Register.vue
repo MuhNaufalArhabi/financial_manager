@@ -30,6 +30,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import {useRouter} from 'vue-router'
+import { api } from '@/plugins/axios';
 
 const router = useRouter()
 const inputRegis = ref({
@@ -41,11 +42,7 @@ const change = ref(true);
 
 async function register(){
     try {
-        await axios({
-            method: 'POST',
-            url: 'http://localhost:3000/users/register',
-            data: inputRegis.value
-        })
+        await api.post('/users/register', inputRegis.value)
         router.push('/login')
     } catch (error) {
         console.log(error)

@@ -61,11 +61,7 @@ const inputLogin = ref({
 
 async function login(){
     try {
-        const { data } = await axios({
-            method: 'POST',
-            url: 'http://localhost:3000/users/login',
-            data: inputLogin.value
-        })
+        const { data } = await api.post('/users/login', inputLogin.value)
         sessionStorage.setItem('access_token', data.access_token)
         store.accountName = data.username
         store.isLogin = true

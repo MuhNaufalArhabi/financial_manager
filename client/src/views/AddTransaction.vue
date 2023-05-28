@@ -152,23 +152,13 @@ function selectInput(value, id) {
 async function handleInputTrans() {
     try {
         if (inputTran.value.id) {
-            await axios({
-                url: 'http://localhost:3000/transaction/' + inputTran.value.id,
-                method: 'PUT',
-                data: inputTran.value,
-                headers: {
-                    access_token: sessionStorage.access_token
-                }
-            })
+            await api.put('/transaction/' + inputTran.value.id, inputTran.value, {headers: {
+                access_token: sessionStorage.access_token
+            }})
         } else {
-            await axios({
-                url: 'http://localhost:3000/transaction',
-                method: 'POST',
-                data: inputTran.value,
-                headers: {
-                    access_token: sessionStorage.access_token
-                }
-            })
+            await api.post('/transaction', inputTran.value, {headers: {
+                access_token: sessionStorage.access_token
+            }})
         }
         store.getTransaction()
         router.go(-1)
