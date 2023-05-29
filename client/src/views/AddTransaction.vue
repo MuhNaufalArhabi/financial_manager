@@ -1,8 +1,11 @@
 <template>
     <page-layout :default="false">
-        <v-container class="d-flex justify-center align-center">
+        <div class="d-flex justify-center align-center h-screen" v-if="store.isLoading">
+            <div class="spinner"></div>
+        </div>
+        <v-container class="d-flex justify-center align-center" v-else>
             <v-btn-toggle v-model="toggleOne" elevation="3" color="accent" variant="outlined" density="compact"
-                class="text-white __text mt-5" rounded @click="handleButtonSwitch" >
+                class="text-white __text mt-5" rounded @click="handleButtonSwitch">
                 <v-btn class="__text">
                     Pengeluaran
                 </v-btn>
@@ -17,19 +20,19 @@
         <v-container v-if="toggleOne !== undefined">
             <form @submit.prevent="handleInputTrans">
                 <v-text-field type="date" density="compact" variant="outlined" hide-details class="text-white"
-                    v-model="inputTran.date"></v-text-field>
+                    v-model="inputTran.date" placeholder="Tanggal"></v-text-field>
                 <!-- <v-select hide-details density="compact" class="text-white mt-3" :items="store.accounts" item-title="name"
                     variant="outlined" item-value="id" v-model="inputTran.AccountId"></v-select> -->
                 <!-- <v-select hide-details density="compact" class="text-white mt-3"
                     :items="sortingCategory(store.categories, toggleOne)" item-title="name" variant="outlined"
                     item-value="id" v-model="inputTran.CategoryId"></v-select> -->
                 <div id="Rekening" class="__border-input d-flex w-100" @click="handleSelect('Rekening')">
-                    <p class="px-3" :style="account === 'Pilih Rekening' && {filter : 'brightness(.7)'}">{{ account }}</p>
+                    <p class="px-3" :style="account === 'Pilih Rekening' && { filter: 'brightness(.7)' }">{{ account }}</p>
                     <v-spacer></v-spacer>
                     <p class="mr-2">&#9660</p>
                 </div>
                 <div id="Kategori" class="__border-input d-flex w-100" @click="handleSelect('Kategori')">
-                    <p class="px-3" :style="category === 'Pilih Kategori' && {filter : 'brightness(.7)'}">{{ category }}</p>
+                    <p class="px-3" :style="category === 'Pilih Kategori' && { filter: 'brightness(.7)' }">{{ category }}</p>
                     <v-spacer></v-spacer>
                     <p class="mr-2">&#9660</p>
                 </div>
@@ -38,7 +41,7 @@
                 <v-text-field type="text" density="compact" variant="outlined" hide-details class="text-white mt-3"
                     label="Masukkan Judul" v-model="inputTran.title"></v-text-field>
                 <div class="rtl">
-                    <v-btn class="__text mt-2 bg-primary" type="submit">Simpan</v-btn>
+                    <v-btn class="__text mt-2 bg-primary" type="submit" :loading="store.isLoading">Simpan</v-btn>
                 </div>
             </form>
         </v-container>
@@ -151,14 +154,19 @@ function selectInput(value, id) {
 
 async function handleInputTrans() {
     try {
+        store.load()
         if (inputTran.value.id) {
-            await api.put('/transaction/' + inputTran.value.id, inputTran.value, {headers: {
-                access_token: sessionStorage.access_token
-            }})
+            await api.put('/transaction/' + inputTran.value.id, inputTran.value, {
+                headers: {
+                    access_token: sessionStorage.access_token
+                }
+            })
         } else {
-            await api.post('/transaction', inputTran.value, {headers: {
-                access_token: sessionStorage.access_token
-            }})
+            await api.post('/transaction', inputTran.value, {
+                headers: {
+                    access_token: sessionStorage.access_token
+                }
+            })
         }
         store.getTransaction()
         router.go(-1)
@@ -167,22 +175,26 @@ async function handleInputTrans() {
     }
 }
 
-async function getAccountById(id){
+async function getAccountById(id) {
     try {
-        const { data } = await api.get('/accounts/' + id, { headers: {
-            access_token: sessionStorage.access_token
-        }})
+        const { data } = await api.get('/accounts/' + id, {
+            headers: {
+                access_token: sessionStorage.access_token
+            }
+        })
         account.value = data.name
     } catch (error) {
         console.log(error)
     }
 }
 
-async function getCategoryById(id){
+async function getCategoryById(id) {
     try {
-        const { data } = await api.get('/categories/' + id, {headers: {
-            access_token: sessionStorage.access_token
-        }})
+        const { data } = await api.get('/categories/' + id, {
+            headers: {
+                access_token: sessionStorage.access_token
+            }
+        })
         category.value = data.name
     } catch (error) {
         console.log(error)
@@ -190,10 +202,9 @@ async function getCategoryById(id){
 }
 
 onMounted(() => {
-    toggleOne.value = inputTran.value.status === 'spending'? 0: 1
+    toggleOne.value = inputTran.value.status === 'spending' ? 0 : 1
     getAccountById(inputTran.value.AccountId)
     getCategoryById(inputTran.value.CategoryId)
-    console.log('ini Rekening:' ,account.value)
 });
 </script>
 
@@ -207,6 +218,7 @@ onMounted(() => {
     margin-top: 10px;
     text-align: center;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .__container-dialog {
@@ -242,7 +254,7 @@ onMounted(() => {
     letter-spacing: normal !important;
 }
 
-.no-text-transform{
+.no-text-transform {
     text-transform: none !important;
     letter-spacing: normal !important;
 }
@@ -251,5 +263,4 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-</style>
+}</style>

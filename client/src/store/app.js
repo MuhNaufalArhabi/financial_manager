@@ -20,20 +20,27 @@ export const useAppStore = defineStore("app", {
       pageStatus: false,
       categoryPage: false,
       updateAccount: false,
-      accountName: ''
+      accountName: "",
+      isLoading: false,
     };
   },
   actions: {
+    load() {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 2000);
+    },
     async getTransaction() {
       try {
-        const { data } = await api.get('/transaction', {
+        const { data } = await api.get("/transaction", {
           params: {
-            date: this.date
+            date: this.date,
           },
           headers: {
-            access_token: sessionStorage.access_token
-          }
-        })
+            access_token: sessionStorage.access_token,
+          },
+        });
         this.transactions = data;
       } catch (error) {
         console.log(error);
@@ -41,11 +48,11 @@ export const useAppStore = defineStore("app", {
     },
     async getAccount() {
       try {
-        const { data } = await api.get('/accounts', {
+        const { data } = await api.get("/accounts", {
           headers: {
-            access_token: sessionStorage.access_token
-          }
-        })
+            access_token: sessionStorage.access_token,
+          },
+        });
         this.accounts = data;
       } catch (error) {
         console.log(error);
@@ -53,28 +60,28 @@ export const useAppStore = defineStore("app", {
     },
     async getCategory() {
       try {
-        const { data } = await api.get('/categories', {
+        const { data } = await api.get("/categories", {
           headers: {
-            access_token: sessionStorage.access_token
-          }
-        })
+            access_token: sessionStorage.access_token,
+          },
+        });
         this.categories = data;
       } catch (error) {
         console.log(error);
       }
     },
-    async getRekap(){
+    async getRekap() {
       try {
-        const { data } = await api.get('/rekap', {
+        const { data } = await api.get("/rekap", {
           headers: {
-            access_token: sessionStorage.access_token
-          }
-        })
-        this.rekap = data
+            access_token: sessionStorage.access_token,
+          },
+        });
+        this.rekap = data;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    },
   },
   persist: { storage: sessionStorage },
 });

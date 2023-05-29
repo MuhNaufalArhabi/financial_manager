@@ -48,7 +48,8 @@ import { useRouter } from 'vue-router'
 const store = useAppStore();
 const router = useRouter()
 
-function updateTrans(payload) {
+async function updateTrans(payload) {
+    store.load()
     store.updateTrans = payload
     store.updateTrans.date = store.updateTrans.date.split('T')[0]
     store.defaultPage = false
