@@ -1,7 +1,7 @@
 <template>
     <v-bottom-navigation bg-color="primary" :elevation="2" class="mx-auto" height="55" elevate-on-scrol max-width="480"
         clipped-left clipped-right grow style="position: fixed; width: 480px; right: 0px;">
-        <v-btn @click="this.$router.push('/')" :active="$route.name === 'home'">
+        <v-btn @click="$router.push('/')" :active="$route.name === 'home'">
             <v-icon>mdi-home</v-icon>
             Data Harian
         </v-btn>

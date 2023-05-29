@@ -191,8 +191,9 @@ async function getCategoryById(id){
 
 onMounted(() => {
     toggleOne.value = inputTran.value.status === 'spending'? 0: 1
-    account.value = inputTran.value.AccountId ? getAccountById(inputTran.value.AccountId): 'Pilih Rekening'
-    category.value = inputTran.value.CategoryId ? getCategoryById(inputTran.value.CategoryId): 'Pilih Kategori'
+    getAccountById(inputTran.value.AccountId)
+    getCategoryById(inputTran.value.CategoryId)
+    console.log('ini Rekening:' ,account.value)
 });
 </script>
 
