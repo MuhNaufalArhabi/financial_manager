@@ -1,5 +1,6 @@
+const path = require('path');
 const err = (err, req, res, next) => {
-  console.log(err)
+  console.log(err, path)
   let status = 500;
   let message = "Internal Server Error";
 
