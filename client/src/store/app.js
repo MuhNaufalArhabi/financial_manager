@@ -25,11 +25,11 @@ export const useAppStore = defineStore("app", {
     };
   },
   actions: {
-    load() {
+    load(time = 3500) {
       this.isLoading = true;
       setTimeout(() => {
         this.isLoading = false;
-      }, 2000);
+      }, time);
     },
     async getTransaction() {
       try {

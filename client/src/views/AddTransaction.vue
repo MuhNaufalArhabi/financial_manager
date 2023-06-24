@@ -3,7 +3,7 @@
         <div class="d-flex justify-center align-center h-screen" v-if="store.isLoading">
             <div class="spinner"></div>
         </div>
-        <v-container class="d-flex justify-center align-center" v-else>
+        <v-container class="d-flex justify-center align-center">
             <v-btn-toggle v-model="toggleOne" elevation="3" color="accent" variant="outlined" density="compact"
                 class="text-white __text mt-5" rounded @click="handleButtonSwitch">
                 <v-btn class="__text">
@@ -21,11 +21,6 @@
             <form @submit.prevent="handleInputTrans">
                 <v-text-field type="date" density="compact" variant="outlined" hide-details class="text-white"
                     v-model="inputTran.date" placeholder="Tanggal"></v-text-field>
-                <!-- <v-select hide-details density="compact" class="text-white mt-3" :items="store.accounts" item-title="name"
-                    variant="outlined" item-value="id" v-model="inputTran.AccountId"></v-select> -->
-                <!-- <v-select hide-details density="compact" class="text-white mt-3"
-                    :items="sortingCategory(store.categories, toggleOne)" item-title="name" variant="outlined"
-                    item-value="id" v-model="inputTran.CategoryId"></v-select> -->
                 <div id="Rekening" class="__border-input d-flex w-100" @click="handleSelect('Rekening')">
                     <p class="px-3" :style="account === 'Pilih Rekening' && { filter: 'brightness(.7)' }">{{ account }}</p>
                     <v-spacer></v-spacer>
@@ -41,7 +36,7 @@
                 <v-text-field type="text" density="compact" variant="outlined" hide-details class="text-white mt-3"
                     label="Masukkan Judul" v-model="inputTran.title"></v-text-field>
                 <div class="rtl">
-                    <v-btn class="__text mt-2 bg-primary" type="submit" :loading="store.isLoading">Simpan</v-btn>
+                    <v-btn class="__text mt-2 bg-primary" type="submit">Simpan</v-btn>
                 </div>
             </form>
         </v-container>
@@ -69,7 +64,6 @@ import PageLayout from '@/layouts/PageLayout.vue'
 import { ref, watch, onMounted } from 'vue';
 import { useAppStore } from '@/store/app';
 import { formatDate, sortingCategory } from '@/services/helpers'
-import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { api } from '@/plugins/axios';
 
@@ -154,6 +148,7 @@ function selectInput(value, id) {
 
 async function handleInputTrans() {
     try {
+        router.go(-1)
         store.load()
         if (inputTran.value.id) {
             await api.put('/transaction/' + inputTran.value.id, inputTran.value, {
@@ -168,8 +163,7 @@ async function handleInputTrans() {
                 }
             })
         }
-        store.getTransaction()
-        router.go(-1)
+        store.getTransaction() 
     } catch (error) {
         console.log(error)
     }
@@ -177,12 +171,15 @@ async function handleInputTrans() {
 
 async function getAccountById(id) {
     try {
-        const { data } = await api.get('/accounts/' + id, {
-            headers: {
-                access_token: sessionStorage.access_token
-            }
-        })
-        account.value = data.name
+        if(id){
+            console.log(id)
+            const { data } = await api.get('/accounts/' + id, {
+                headers: {
+                    access_token: sessionStorage.access_token
+                }
+            })
+            account.value = data.name
+        }
     } catch (error) {
         console.log(error)
     }
@@ -190,12 +187,14 @@ async function getAccountById(id) {
 
 async function getCategoryById(id) {
     try {
-        const { data } = await api.get('/categories/' + id, {
-            headers: {
-                access_token: sessionStorage.access_token
-            }
-        })
-        category.value = data.name
+        if(id){
+            const { data } = await api.get('/categories/' + id, {
+                headers: {
+                    access_token: sessionStorage.access_token
+                }
+            })
+            category.value = data.name
+        }
     } catch (error) {
         console.log(error)
     }

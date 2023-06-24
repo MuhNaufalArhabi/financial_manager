@@ -29,7 +29,7 @@
             </form>
             <p class="atau" style="text-align: center; margin-top:24px; font-family:Nunito; font-size:14px;">Atau</p>
             <div class="d-flex justify-center mt-5">
-                <GoogleLogin :callback="loginGoogle" >
+                <GoogleLogin :callback="loginGoogle">
                 </GoogleLogin>
             </div>
             <div class="toRegister">
@@ -73,6 +73,7 @@ async function login(){
 
 const loginGoogle = async(response) => {
       try {
+        store.load(3500)
         const {data} = await api.post('/users/sign-in',undefined,{headers:{
             google_token :response.credential
         }})

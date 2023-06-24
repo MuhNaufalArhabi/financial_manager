@@ -1,5 +1,8 @@
 <template>
     <MainLayout>
+        <div class="d-flex justify-center align-center h-screen" v-if="store.isLoading">
+            <div class="spinner"></div>
+        </div>
         <v-row no-gutters v-for="data in store.transactions" class="my-1">
             <div style="background-color: #404449;" class="pa-2 w-100">
                 <v-row class="d-flex justify-end">
@@ -49,7 +52,7 @@ const store = useAppStore();
 const router = useRouter()
 
 async function updateTrans(payload) {
-    store.load()
+    store.load(2000)
     store.updateTrans = payload
     store.updateTrans.date = store.updateTrans.date.split('T')[0]
     store.defaultPage = false

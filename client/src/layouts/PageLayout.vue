@@ -55,9 +55,14 @@ function handleBack(){
 
 async function deleteTransaction(id){
     try {
-        await api.delete('/transaction/' + id)
-        store.updateTrans = false
         router.go(-1)
+        store.load()
+        await api.delete('/transaction/' + id, {
+                headers: {
+                    access_token: sessionStorage.access_token
+                }
+            })
+        store.updateTrans = false
     } catch (error) {
         console.log(error)
     }
