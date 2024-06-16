@@ -14,6 +14,10 @@ app.use(cors({origin: '*'}))
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 
+app.get('/', (req, res) => {
+    res.send('hai vercel')
+})
+
 app.use(route)
 app.use(err)
 
