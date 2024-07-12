@@ -19,7 +19,6 @@ export function registerPlugins(app) {
     .use(router)
     .use(pinia)
     .use(vue3GoogleLogin, {
-      clientId:
-      '846729586173-nu7j67ktrdjg6ofpul9rd70stvfk0iov.apps.googleusercontent.com',
+      clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
     });
 }
